@@ -425,7 +425,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
   <!-- GALERIA -->
   <div class="produto-galeria">
     <div class="galeria-main">
-      <img src="https://www.artefatocafes.com.br/cdn/shop/files/IMG-1406.jpg?v=1699876549&width=1000" alt="Catuaí Vermelho" id="mainImg">
+      <img src="foto-bourbon-creme.jpg" alt="Catuaí Vermelho" id="mainImg">
       <div class="galeria-badge">Safra 2024</div>
     </div>
   </div>
@@ -582,11 +582,11 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
   <h2>Você também pode<br><em>gostar</em></h2>
   <div class="outros-grid">
     <a href="produto-catuai.html" class="outro-card">
-      <div class="outro-img"><img src="https://www.artefatocafes.com.br/cdn/shop/files/IMG-1406.jpg?v=1699876549&width=400" alt="Catuaí Vermelho"></div>
+      <div class="outro-img"><img src="foto-bourbon-creme.jpg" alt="Catuaí Vermelho"></div>
       <div class="outro-info"><div class="outro-nome">Catuaí Vermelho</div><div class="outro-price">A partir de R$ 35,00</div></div>
     </a>
     <a href="produto-catigua.html" class="outro-card">
-      <div class="outro-img"><img src="https://www.artefatocafes.com.br/cdn/shop/files/IMG-1406.jpg?v=1699876549&width=400" alt="Catiguá MG2"></div>
+      <div class="outro-img"><img src="foto-bourbon-creme.jpg" alt="Catiguá MG2"></div>
       <div class="outro-info"><div class="outro-nome">Catiguá MG2</div><div class="outro-price">A partir de R$ 35,00</div></div>
     </a>
     <a href="produto-kit.html" class="outro-card">
@@ -668,20 +668,4 @@ function addToCart() {
     nome: 'Bourbon Amarelo',
     tamanho, moagem,
     preco: parseFloat(preco),
-    img: 'https://www.artefatocafes.com.br/cdn/shop/files/IMG-1406.jpg?v=1699876549&width=200'
-  });
-  sessionStorage.setItem('cart', JSON.stringify(cart));
-
-  const btn = document.querySelector('.btn-comprar');
-  btn.textContent = '✓ Adicionado ao carrinho!';
-  btn.style.background = 'var(--verde-l)';
-  setTimeout(() => {
-    btn.textContent = 'Adicionar ao carrinho';
-    btn.style.background = '';
-  }, 2000);
-
-  document.getElementById('cartCount').textContent = `(${cart.length})`;
-}
-</script>
-</body>
-</html>
+    img: 'foto-bourbon-creme.jpg

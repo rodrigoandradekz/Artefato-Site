@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pedido Confirmado — Artefato Cafés Especiais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Didact+Gothic&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --verde:#192218;--verde-m:#243322;--verde-l:#35512F;
+  --ouro:#C4943A;--ouro-l:#E2BE82;--ouro-pale:#F0E4C8;
+  --creme:#F4EFE4;--creme-d:#E6DDC8;--off-white:#FDFAF5;
+  --muted:#7A7060;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Didact Gothic',sans-serif;background:var(--creme);color:var(--verde);overflow-x:hidden}
+.ann{background:var(--verde);color:var(--ouro-l);text-align:center;padding:9px 24px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase}
+.ann strong{color:var(--ouro)}
+nav{position:sticky;top:0;z-index:500;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:16px 56px;border-bottom:1px solid rgba(196,148,58,0.15);background:rgba(244,239,228,0.97);backdrop-filter:blur(16px)}
+.nav-left,.nav-right-group{display:flex;gap:28px;align-items:center}
+.nav-right-group{justify-content:flex-end}
+.logo-nav{text-align:center;text-decoration:none;display:block}
+.logo-nav img{height:38px;width:auto}
+a.nav-link{text-decoration:none;color:var(--verde-m);font-size:10px;letter-spacing:2.5px;text-transform:uppercase;transition:color .3s}
+a.nav-link:hover{color:var(--ouro)}
+.nav-cart{text-decoration:none;background:var(--ouro);color:var(--verde);padding:9px 18px;font-size:10px;letter-spacing:2px;text-transform:uppercase;transition:all .3s}
+.nav-cart:hover{background:var(--verde);color:var(--creme)}
+footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding:72px 56px 28px}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;padding-bottom:48px;border-bottom:1px solid rgba(196,148,58,0.1);margin-bottom:28px}
+.footer-brand img{height:48px;width:auto;margin-bottom:20px;display:block}
+.footer-brand p{font-size:12px;color:rgba(244,239,228,0.35);line-height:1.8;max-width:260px}
+.footer-social{display:flex;gap:20px;margin-top:20px}
+.footer-social a{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(196,148,58,0.5);text-decoration:none;transition:color .3s}
+.footer-social a:hover{color:var(--ouro)}
+.fcol h4{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--ouro);margin-bottom:18px;font-weight:400}
+.fcol ul{list-style:none}
+.fcol li{margin-bottom:10px}
+.fcol a{font-size:12px;color:rgba(244,239,232,0.4);text-decoration:none;transition:color .3s}
+.fcol a:hover{color:var(--ouro-l)}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between}
+.footer-bottom p{font-size:10px;color:rgba(244,239,228,0.2)}
+.pay-icons{display:flex;gap:8px}
+.pay{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:3px;padding:4px 10px;font-size:9px;color:rgba(244,239,228,0.3)}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.vis{opacity:1;transform:none}
+@media(max-width:768px){
+  nav{grid-template-columns:1fr auto;padding:12px 20px}
+  .nav-left{display:none}
+  .nav-right-group{gap:12px}
+  .logo-nav img{height:30px}
+  .nav-cart{padding:8px 14px;font-size:9px}
+  footer{padding:48px 20px 24px}
+  .footer-top{grid-template-columns:1fr 1fr;gap:32px}
+  .footer-brand{grid-column:1/-1}
+  .footer-bottom{flex-direction:column;gap:12px;align-items:flex-start}
+}
+
+
+body { background: var(--verde); min-height: 100vh; }
+
+.confirm-wrap {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 48px 24px;
+  position: relative; overflow: hidden;
+}
+.confirm-wrap::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 700px; height: 700px;
+  border: 1px solid rgba(196,148,58,0.07);
+  border-radius: 50%; pointer-events: none;
+}
+.confirm-wrap::after {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 440px; height: 440px;
+  border: 1px solid rgba(196,148,58,0.05);
+  border-radius: 50%; pointer-events: none;
+}
+
+.confirm-box {
+  background: var(--creme);
+  max-width: 640px; width: 100%;
+  padding: 56px 56px;
+  position: relative; z-index: 1;
+  animation: fadeUp .7s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(24px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+.confirm-icon {
+  width: 56px; height: 56px;
+  background: var(--verde-l);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 24px;
+}
+.confirm-eye {
+  font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--ouro); margin-bottom: 14px;
+}
+.confirm-box h1 {
+  font-family: 'Italiana', serif;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 400; color: var(--verde); line-height: 1.05;
+  margin-bottom: 12px;
+}
+.confirm-box h1 em { font-style: italic; color: var(--verde-l); }
+.confirm-box > p {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.8; margin-bottom: 32px;
+  max-width: 480px;
+}
+
+.confirm-pedido-id {
+  background: var(--creme-d);
+  border: 1px solid rgba(196,148,58,0.2);
+  padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px;
+}
+.confirm-pedido-id .label {
+  font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--muted);
+}
+.confirm-pedido-id .id {
+  font-family: 'Italiana', serif;
+  font-size: 22px; color: var(--verde);
+  font-weight: 400; letter-spacing: 2px;
+}
+
+.confirm-itens {
+  border-top: 1px solid rgba(196,148,58,0.15);
+  padding-top: 24px; margin-bottom: 24px;
+}
+.confirm-item {
+  display: flex; gap: 12px; align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(196,148,58,0.08);
+}
+.confirm-item:last-child { border-bottom: none; }
+.confirm-item img {
+  width: 44px; height: 44px; object-fit: cover;
+  flex-shrink: 0; background: var(--creme-d);
+}
+.confirm-item-info { flex: 1; }
+.confirm-item-nome { font-size: 13px; color: var(--verde); }
+.confirm-item-meta { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.confirm-item-preco { font-size: 13px; color: var(--verde-m); }
+
+.confirm-totals {
+  background: var(--creme-d);
+  padding: 16px 20px; margin-bottom: 28px;
+}
+.confirm-total-linha {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--muted); margin-bottom: 8px;
+}
+.confirm-total-linha:last-child {
+  margin-bottom: 0; font-size: 14px; color: var(--verde);
+  padding-top: 8px; border-top: 1px solid rgba(196,148,58,0.15);
+  font-weight: 400;
+}
+.confirm-total-linha:last-child span:last-child {
+  font-family: 'Italiana', serif; font-size: 22px;
+}
+
+.confirm-info {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 32px;
+}
+.confirm-info-block {
+  padding: 16px; background: var(--creme-d);
+  border: 1px solid rgba(196,148,58,0.12);
+}
+.confirm-info-label {
+  font-size: 9px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--ouro);
+  margin-bottom: 6px;
+}
+.confirm-info-val {
+  font-size: 12px; color: var(--verde); line-height: 1.6;
+}
+
+.confirm-prazo {
+  background: rgba(53,81,47,0.08);
+  border: 1px solid rgba(53,81,47,0.2);
+  padding: 16px 20px; margin-bottom: 28px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.confirm-prazo-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.confirm-prazo p {
+  font-size: 12px; color: var(--verde-m);
+  line-height: 1.7; margin: 0;
+}
+
+.confirm-btns {
+  display: flex; gap: 12px; flex-wrap: wrap;
+}
+.btn-loja {
+  flex: 1; background: var(--verde); color: var(--ouro-l);
+  border: none; padding: 14px;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; font-family: 'Didact Gothic', sans-serif;
+  text-decoration: none; display: block; text-align: center;
+  transition: all .3s; min-width: 160px;
+}
+.btn-loja:hover { background: var(--ouro); color: var(--verde); }
+.btn-wpp {
+  flex: 1; background: transparent; color: var(--verde);
+  border: 1px solid rgba(196,148,58,0.3);
+  padding: 14px; font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase; cursor: pointer;
+  font-family: 'Didact Gothic', sans-serif;
+  text-decoration: none; display: block; text-align: center;
+  transition: all .3s; min-width: 160px;
+}
+.btn-wpp:hover { border-color: var(--verde); background: var(--creme-d); }
+
+@media(max-width:600px){
+  .confirm-box { padding: 36px 24px; }
+  .confirm-info { grid-template-columns: 1fr; }
+  .confirm-btns { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="confirm-wrap">
+  <div class="confirm-box">
+
+    <div class="confirm-icon">✓</div>
+    <div class="confirm-eye">Pedido recebido</div>
+    <h1>Pedido <em>confirmado</em><br>com sucesso!</h1>
+    <p>Obrigado pela sua compra. Você receberá um email com os detalhes do pedido e o código de rastreamento assim que o café for despachado.</p>
+
+    <div class="confirm-pedido-id">
+      <div>
+        <div class="label">Número do pedido</div>
+        <div class="id" id="pedidoId">—</div>
+      </div>
+      <div style="text-align:right">
+        <div class="label">Data</div>
+        <div style="font-size:13px;color:var(--muted)" id="pedidoData">—</div>
+      </div>
+    </div>
+
+    <div class="confirm-itens" id="confirmItens"></div>
+
+    <div class="confirm-totals" id="confirmTotals"></div>
+
+    <div class="confirm-info" id="confirmInfo"></div>
+
+    <div class="confirm-prazo">
+      <div class="confirm-prazo-icon">📦</div>
+      <p>Seu café será torrado após a confirmação do pagamento e despachado em até <strong>3 dias úteis</strong>. Você receberá o código de rastreamento por email.</p>
+    </div>
+
+    <div class="confirm-btns">
+      <a href="loja.html" class="btn-loja">Continuar comprando</a>
+      <a href="#" class="btn-wpp" id="btnWpp">💬 Falar no WhatsApp</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const pedido = JSON.parse(sessionStorage.getItem('pedido') || '{}');
+
+function fmt(v) {
+  if(typeof v === 'string') return v;
+  return 'R$ ' + parseFloat(v).toFixed(2).replace('.',',');
+}
+
+if(pedido.id) {
+  document.getElementById('pedidoId').textContent = pedido.id;
+  document.getElementById('pedidoData').textContent = pedido.data;
+
+  // Itens
+  const itens = pedido.itens || [];
+  document.getElementById('confirmItens').innerHTML = itens.map(item => `
+    <div class="confirm-item">
+      <img src="${item.img}" alt="${item.nome}">
+      <div class="confirm-item-info">
+        <div class="confirm-item-nome">${item.nome}</div>
+        <div class="confirm-item-meta">${item.tamanho} · ${item.moagem} · Qtd: ${item.qty||1}</div>
+      </div>
+      <div class="confirm-item-preco">${fmt(item.preco*(item.qty||1))}</div>
+    </div>
+  `).join('');
+
+  // Totais
+  const sub = itens.reduce((s,i) => s+i.preco*(i.qty||1), 0);
+  const desc = (pedido.cupom?.desconto || 0);
+  const frete = (pedido.frete?.valor || 0);
+  const total = pedido.total || fmt(Math.max(0, sub-desc)+frete);
+  document.getElementById('confirmTotals').innerHTML = `
+    <div class="confirm-total-linha"><span>Subtotal</span><span>${fmt(sub)}</span></div>
+    ${desc > 0 ? `<div class="confirm-total-linha"><span>Desconto</span><span>− ${fmt(desc)}</span></div>` : ''}
+    <div class="confirm-total-linha"><span>Frete (${pedido.frete?.nome||'—'})</span><span>${frete===0?'Grátis':fmt(frete)}</span></div>
+    <div class="confirm-total-linha"><span>Total pago</span><span>${total}</span></div>
+  `;
+
+  // Info entrega e pagamento
+  const end = pedido.endereco || {};
+  const pgto = { pix:'Pix', cartao:'Cartão de crédito', boleto:'Boleto bancário' }[pedido.pagamento] || '—';
+  document.getElementById('confirmInfo').innerHTML = `
+    <div class="confirm-info-block">
+      <div class="confirm-info-label">Entrega</div>
+      <div class="confirm-info-val">
+        ${end.rua}, ${end.numero}${end.complemento ? ', '+end.complemento : ''}<br>
+        ${end.bairro} — ${end.cidade}/${end.estado}<br>
+        CEP ${end.cep}
+      </div>
+    </div>
+    <div class="confirm-info-block">
+      <div class="confirm-info-label">Pagamento</div>
+      <div class="confirm-info-val">${pgto}</div>
+      <div class="confirm-info-label" style="margin-top:12px">Email de confirmação</div>
+      <div class="confirm-info-val">${pedido.email||'—'}</div>
+    </div>
+  `;
+
+  // WhatsApp
+  const wppMsg = encodeURIComponent(`Olá! Acabei de fazer o pedido ${pedido.id} no site. Pode me ajudar?`);
+  document.getElementById('btnWpp').href = `https://wa.me/5500000000000?text=${wppMsg}`;
+} else {
+  // Sem dados — redirecionar para início
+  document.getElementById('pedidoId').textContent = '—';
+  document.getElementById('pedidoData').textContent = new Date().toLocaleDateString('pt-BR');
+  document.getElementById('confirmItens').innerHTML = '<p style="font-size:13px;color:var(--muted);padding:16px 0">Nenhum item encontrado.</p>';
+  document.getElementById('confirmTotals').innerHTML = '';
+  document.getElementById('confirmInfo').innerHTML = '';
+}
+</script>
+</body>
+</html>

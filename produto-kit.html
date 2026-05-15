@@ -230,77 +230,28 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 .frete-erro.show { display: block; }
 
 
-/* ===== FRETE FRENET ===== */
-.frete-calc { margin-top: 24px; }
-.frete-calc-label {
-  font-size: 10px; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 10px; display: block;
-}
-.frete-input-row {
-  display: flex; gap: 8px; margin-bottom: 12px;
-}
-.frete-cep-input {
-  flex: 1; padding: 12px 16px;
-  border: 1px solid rgba(196,148,58,0.25);
-  background: transparent; color: var(--verde);
-  font-family: 'Didact Gothic', sans-serif;
-  font-size: 13px; outline: none;
-  transition: border-color .2s;
-}
-.frete-cep-input:focus { border-color: var(--ouro); }
-.frete-btn {
-  padding: 12px 20px;
-  background: var(--verde); color: var(--ouro-l);
-  border: none; cursor: pointer;
-  font-family: 'Didact Gothic', sans-serif;
-  font-size: 10px; letter-spacing: 2px;
-  text-transform: uppercase; transition: background .2s;
-  white-space: nowrap;
-}
-.frete-btn:hover { background: var(--ouro); color: var(--verde); }
-.frete-resultado { margin-top: 8px; }
-.frete-opcao {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px; margin-bottom: 4px;
-  border: 1px solid rgba(196,148,58,0.15);
-  cursor: pointer; transition: all .2s;
-  background: var(--creme);
-}
-.frete-opcao:hover { border-color: rgba(196,148,58,0.4); }
-.frete-opcao.selecionado {
-  border-color: var(--ouro);
-  background: rgba(196,148,58,0.08);
-}
-.frete-opcao-info { display: flex; flex-direction: column; gap: 2px; }
-.frete-nome { font-size: 12px; color: var(--verde); }
-.frete-carrier { font-size: 10px; color: var(--muted); }
-.frete-opcao-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.frete-prazo { font-size: 10px; color: var(--muted); letter-spacing: .5px; }
-.frete-preco { font-size: 14px; color: var(--verde); font-weight: 500; }
-.frete-opcao.selecionado .frete-preco { color: var(--ouro); }
-.frete-loading { 
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; color: var(--muted); padding: 12px 0;
-}
-.frete-spinner {
-  width: 14px; height: 14px;
-  border: 2px solid rgba(196,148,58,0.2);
-  border-top-color: var(--ouro);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  display: inline-block;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.frete-erro { font-size: 12px; color: #c0392b; padding: 8px 0; }
-.frete-link-cep {
-  font-size: 10px; color: var(--ouro);
-  text-decoration: none; letter-spacing: 1px;
-  display: block; margin-bottom: 12px;
-}
-.frete-link-cep:hover { text-decoration: underline; }
 
+/* FRETE */
+.frete-calc{margin-top:28px;padding-top:24px;border-top:1px solid rgba(196,148,58,0.15)}
+.frete-calc-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block}
+.frete-link-cep{font-size:10px;color:var(--ouro);text-decoration:none;letter-spacing:1px;display:block;margin-bottom:10px}
+.frete-input-row{display:flex;gap:8px;margin-bottom:8px}
+.frete-cep-input{flex:1;padding:12px 16px;border:1px solid rgba(196,148,58,0.25);background:transparent;color:var(--verde);font-family:'Didact Gothic',sans-serif;font-size:14px;outline:none}
+.frete-cep-input:focus{border-color:var(--ouro)}
+.frete-btn{padding:12px 20px;background:var(--verde);color:var(--ouro-l);border:none;cursor:pointer;font-family:'Didact Gothic',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap}
+.frete-btn:hover{background:var(--ouro);color:var(--verde)}
+.frete-resultado{margin-top:8px}
+.frete-opcao{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;margin-bottom:4px;border:1px solid rgba(196,148,58,0.15);background:var(--creme)}
+.frete-opcao-info{display:flex;flex-direction:column;gap:2px}
+.frete-nome{font-size:12px;color:var(--verde)}
+.frete-carrier{font-size:10px;color:var(--muted)}
+.frete-opcao-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.frete-prazo{font-size:10px;color:var(--muted)}
+.frete-preco{font-size:14px;color:var(--verde)}
+.frete-loading{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:12px 0}
+.frete-spinner{width:14px;height:14px;border:2px solid rgba(196,148,58,0.2);border-top-color:var(--ouro);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.frete-erro{font-size:12px;color:#c0392b;padding:8px 0}
 </style>
 </head>
 <body>
@@ -379,9 +330,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 
     
     <!-- CALCULADOR DE FRETE -->
-    <div class="frete-calc">
-      <div class="frete-calc-header">Calcular frete</div>
-      <div class="frete-calc-body">
+    <div class="frete-calc-body">
         <div class="frete-cep-row">
           <input class="frete-cep-input" id="freteCepInput" type="text"
             placeholder="Digite seu CEP" maxlength="9">
@@ -400,45 +349,26 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
     </div>
 
     <button class="btn-comprar" onclick="addToCart()">Adicionar ao carrinho</button>
-    <div class="frete-calc">
+<div class="frete-calc">
   <span class="frete-calc-label">Calcular frete</span>
   <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" class="frete-link-cep" target="_blank">Não sei meu CEP →</a>
   <div class="frete-input-row">
-    <input type="text" class="frete-cep-input" id="cep_produtokit" placeholder="00000-000" maxlength="9"
-      oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\d{5})(\d)/,'$1-$2')"
-      onkeydown="if(event.key==='Enter')calcFrete_produtokit()">
+    <input type="text" class="frete-cep-input" id="freteCep" placeholder="00000-000" maxlength="9"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/([0-9]{5})([0-9])/,'$1-$2')"
+      onkeydown="if(event.key==='Enter')calcFrete()">
     <button class="frete-btn" onclick="calcFrete()">Calcular</button>
   </div>
-  <div class="frete-resultado" id="res_produtokit"></div>
+  <div id="freteResultado"></div>
+</div>
+    <div class="frete-resultado" id="res_produtokit"></div>
 </div>
 <script>
-function calcFrete_produtokit() {
-  const sel = document.querySelector('.size-btn.active, .opcao-tamanho.ativo');
-  const tipo = sel ? (sel.dataset.size === '1kg' ? '1kg' : 'kit') : 'kit';
-  const val = tipo === '1kg' ? 175.0 : 175.0;
-  const qty = parseInt(document.getElementById('qty')?.value || '1');
-  handleCalcularFrete('cep_produtokit', 'res_produtokit', tipo, qty, val * qty);
-}
+
 </script>
-<a href="https://wa.me/5537984026744?text=Olá! Gostaria de pedir o Coleção Artefato" <div class="frete-calc">
-  <span class="frete-calc-label">Calcular frete</span>
-  <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" class="frete-link-cep" target="_blank">Não sei meu CEP →</a>
-  <div class="frete-input-row">
-    <input type="text" class="frete-cep-input" id="cep_produtokit" placeholder="00000-000" maxlength="9"
-      oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\d{5})(\d)/,'$1-$2')"
-      onkeydown="if(event.key==='Enter')calcFrete_produtokit()">
-    <button class="frete-btn" onclick="calcFrete()">Calcular</button>
-  </div>
-  <div class="frete-resultado" id="res_produtokit"></div>
+<a href="https://wa.me/5537984026744?text=Olá! Gostaria de pedir o Coleção Artefato" <div class="frete-resultado" id="res_produtokit"></div>
 </div>
 <script>
-function calcFrete_produtokit() {
-  const sel = document.querySelector('.size-btn.active, .opcao-tamanho.ativo');
-  const tipo = sel ? (sel.dataset.size === '1kg' ? '1kg' : 'kit') : 'kit';
-  const val = tipo === '1kg' ? 175.0 : 175.0;
-  const qty = parseInt(document.getElementById('qty')?.value || '1');
-  handleCalcularFrete('cep_produtokit', 'res_produtokit', tipo, qty, val * qty);
-}
+
 </script>
     <div btn-wpp" target="_blank">💬 Pedir pelo WhatsApp</a>
 
@@ -578,135 +508,62 @@ function addToCart() {
 }
 
 /* ===== INTEGRAÇÃO FRENET ===== */
-const FRENET_TOKEN = 'AFA2219BRBC85R4765R81F4RB2BAB2455F00';
-const CEP_ORIGEM = '38970000';
 
-const PRODUTO_CONFIG = {
-  '250g': { peso: 0.36, altura: 12, largura: 17, comprimento: 22 },
-  '1kg':  { peso: 1.12, altura: 12, largura: 17, comprimento: 22 },
-  'kit':  { peso: 1.14, altura: 12, largura: 17, comprimento: 22 },
-};
-
-async function calcularFreteFrenet(cepDestino, tipoProduto, quantidade, valorTotal) {
-  const config = PRODUTO_CONFIG[tipoProduto] || PRODUTO_CONFIG['250g'];
-  
-  const body = {
-    SellerCEP: CEP_ORIGEM,
-    RecipientCEP: cepDestino.replace(/\D/g, ''),
-    ShipmentInvoiceValue: valorTotal,
-    ShippingItemArray: [{
-      Height: config.altura,
-      Length: config.comprimento,
-      Quantity: quantidade,
-      Weight: config.peso,
-      Width: config.largura,
-      SKU: tipoProduto,
-      Category: 'Alimentos'
-    }]
+/* FRENET */
+async function handleCalcularFrete(inputId, resultId, tipo, qty, valor) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const cep = input.value.replace(/[^0-9]/g, '');
+  if (cep.length !== 8) { alert('Digite um CEP válido com 8 dígitos.'); return; }
+  const el = document.getElementById(resultId);
+  if (el) el.innerHTML = '<div class="frete-loading"><span class="frete-spinner"></span> Calculando...</div>';
+  const configs = {
+    '250g':{peso:0.36,altura:12,largura:17,comprimento:22},
+    '1kg': {peso:1.12,altura:12,largura:17,comprimento:22},
+    'kit': {peso:1.14,altura:12,largura:17,comprimento:22}
   };
-
+  const cfg = configs[tipo] || configs['250g'];
   try {
-    const response = await fetch('/api/frete', {
-      method: 'POST',
+    const r = await fetch('/api/frete', {
+      method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(body)
+      body:JSON.stringify({
+        SellerCEP:'38970000',
+        RecipientCEP:cep,
+        ShipmentInvoiceValue:valor,
+        ShippingItemArray:[{Height:cfg.altura,Length:cfg.comprimento,
+          Quantity:qty,Weight:cfg.peso,Width:cfg.largura,SKU:tipo,Category:'Alimentos'}]
+      })
     });
-
-    if (!response.ok) throw new Error('Erro na API Frenet');
-    const data = await response.json();
-    return data.ShippingSevicesArray || [];
-  } catch (err) {
-    console.error('Frenet error:', err);
-    return null;
-  }
-}
-
-function renderizarOpcoesFrete(opcoes, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  if (!opcoes || opcoes.length === 0) {
-    container.innerHTML = '<p class="frete-erro">CEP não encontrado ou sem cobertura.</p>';
-    return;
-  }
-
-  const disponíveis = opcoes.filter(o => !o.Error);
-  
-  if (disponíveis.length === 0) {
-    container.innerHTML = '<p class="frete-erro">Nenhuma opção disponível para este CEP.</p>';
-    return;
-  }
-
-  const html = disponíveis.map(opcao => {
-    const preco = parseFloat(opcao.ShippingPrice).toLocaleString('pt-BR', {
-      style: 'currency', currency: 'BRL'
-    });
-    const prazo = opcao.DeliveryTime;
-    const nome = opcao.ServiceDescription;
-    const carrier = opcao.Carrier || '';
-    
-    return `
-      <div class="frete-opcao" data-servico="${opcao.ServiceCode}" data-preco="${opcao.ShippingPrice}" data-prazo="${prazo}">
+    const data = await r.json();
+    const opcoes = (data.ShippingSevicesArray||[]).filter(o=>!o.Error);
+    if (!el) return;
+    if (!opcoes.length){el.innerHTML='<p class="frete-erro">Sem cobertura para este CEP.</p>';return;}
+    el.innerHTML = opcoes.map(o=>`
+      <div class="frete-opcao">
         <div class="frete-opcao-info">
-          <span class="frete-nome">${nome}</span>
-          ${carrier ? `<span class="frete-carrier">${carrier}</span>` : ''}
+          <span class="frete-nome">${o.ServiceDescription}</span>
+          <span class="frete-carrier">${o.Carrier||''}</span>
         </div>
         <div class="frete-opcao-right">
-          <span class="frete-prazo">${prazo} ${prazo === 1 ? 'dia útil' : 'dias úteis'}</span>
-          <span class="frete-preco">${preco}</span>
+          <span class="frete-prazo">${o.DeliveryTime} ${o.DeliveryTime==1?'dia útil':'dias úteis'}</span>
+          <span class="frete-preco">${parseFloat(o.ShippingPrice).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span>
         </div>
-      </div>`;
-  }).join('');
-
-  container.innerHTML = html;
-
-  // Seleção de opção
-  container.querySelectorAll('.frete-opcao').forEach(el => {
-    el.addEventListener('click', () => {
-      container.querySelectorAll('.frete-opcao').forEach(e => e.classList.remove('selecionado'));
-      el.classList.add('selecionado');
-      // Disparar evento para o carrinho capturar
-      document.dispatchEvent(new CustomEvent('freteSelected', {
-        detail: {
-          servico: el.dataset.servico,
-          preco: parseFloat(el.dataset.preco),
-          prazo: el.dataset.prazo,
-          nome: el.querySelector('.frete-nome').textContent
-        }
-      }));
-    });
-  });
-}
-
-async function handleCalcularFrete(inputId, resultId, tipoProduto, quantidade, valor) {
-  const input = document.getElementById(inputId);
-  const cep = input ? input.value.replace(/\D/g, '') : '';
-
-  if (cep.length !== 8) {
-    alert('Digite um CEP válido com 8 dígitos.');
-    return;
+      </div>`).join('');
+  } catch(e){
+    if(el) el.innerHTML='<p class="frete-erro">Erro ao calcular. Tente novamente.</p>';
   }
-
-  const container = document.getElementById(resultId);
-  if (container) {
-    container.innerHTML = '<div class="frete-loading"><span class="frete-spinner"></span> Calculando...</div>';
-  }
-
-  const opcoes = await calcularFreteFrenet(cep, tipoProduto, quantidade, valor);
-  renderizarOpcoesFrete(opcoes, resultId);
 }
-
 
 function calcFrete() {
-  const cepInput = document.getElementById('freteCepInput') || document.querySelector('.frete-cep-input');
-  if (!cepInput) return;
+  const input = document.getElementById('freteCep');
   const sel = document.querySelector('.size-btn.active, [data-size].active');
-  const tipo = sel ? (sel.dataset.size || 'kit') : 'kit';
-  const qty = parseInt((document.getElementById('qty') || {value:'1'}).value);
+  const tipo = sel ? (sel.dataset.size || '250g') : '250g';
+  const qty = parseInt((document.getElementById('qty')||{value:'1'}).value);
   const val = tipo === '1kg' ? 169 : 45;
-  const resultId = 'freteResultado';
-  handleCalcularFrete(cepInput.id || 'freteCepInput', resultId, tipo, qty, val * qty);
+  handleCalcularFrete('freteCep', 'freteResultado', tipo, qty, val * qty);
 }
+
 </script>
 </body>
 </html>

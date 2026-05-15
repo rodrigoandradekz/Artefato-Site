@@ -602,7 +602,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
     <input type="text" class="frete-cep-input" id="cep_produtocatigua" placeholder="00000-000" maxlength="9"
       oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\d{5})(\d)/,'$1-$2')"
       onkeydown="if(event.key==='Enter')calcFrete_produtocatigua()">
-    <button class="frete-btn" onclick="calcFrete_produtocatigua()">Calcular</button>
+    <button class="frete-btn" onclick="calcFrete()">Calcular</button>
   </div>
   <div class="frete-resultado" id="res_produtocatigua"></div>
 </div>
@@ -622,7 +622,7 @@ function calcFrete_produtocatigua() {
     <input type="text" class="frete-cep-input" id="cep_produtocatigua" placeholder="00000-000" maxlength="9"
       oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\d{5})(\d)/,'$1-$2')"
       onkeydown="if(event.key==='Enter')calcFrete_produtocatigua()">
-    <button class="frete-btn" onclick="calcFrete_produtocatigua()">Calcular</button>
+    <button class="frete-btn" onclick="calcFrete()">Calcular</button>
   </div>
   <div class="frete-resultado" id="res_produtocatigua"></div>
 </div>
@@ -915,6 +915,17 @@ async function handleCalcularFrete(inputId, resultId, tipoProduto, quantidade, v
   renderizarOpcoesFrete(opcoes, resultId);
 }
 
+
+function calcFrete() {
+  const cepInput = document.getElementById('freteCepInput') || document.querySelector('.frete-cep-input');
+  if (!cepInput) return;
+  const sel = document.querySelector('.size-btn.active, [data-size].active');
+  const tipo = sel ? (sel.dataset.size || '250g') : '250g';
+  const qty = parseInt((document.getElementById('qty') || {value:'1'}).value);
+  const val = tipo === '1kg' ? 169 : 45;
+  const resultId = 'freteResultado';
+  handleCalcularFrete(cepInput.id || 'freteCepInput', resultId, tipo, qty, val * qty);
+}
 </script>
 </body>
 </html>

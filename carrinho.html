@@ -605,7 +605,7 @@ function calcularFreteCarrinho() {
   opcoes.classList.add('show');
 
   // Montar itens do carrinho
-  const cart = JSON.parse(sessionStorage.getItem('artefato_cart') || '[]');
+  const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
   const configs = {
     '250g': {peso:0.36, altura:12, largura:17, comprimento:22},
     '1kg':  {peso:1.12, altura:12, largura:17, comprimento:22},

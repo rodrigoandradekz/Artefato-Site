@@ -396,76 +396,26 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 .frete-erro.show { display: block; }
 
 
-/* ===== FRETE FRENET ===== */
-.frete-calc { margin-top: 24px; }
-.frete-calc-label {
-  font-size: 10px; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 10px; display: block;
-}
-.frete-input-row {
-  display: flex; gap: 8px; margin-bottom: 12px;
-}
-.frete-cep-input {
-  flex: 1; padding: 12px 16px;
-  border: 1px solid rgba(196,148,58,0.25);
-  background: transparent; color: var(--verde);
-  font-family: 'Didact Gothic', sans-serif;
-  font-size: 13px; outline: none;
-  transition: border-color .2s;
-}
-.frete-cep-input:focus { border-color: var(--ouro); }
-.frete-btn {
-  padding: 12px 20px;
-  background: var(--verde); color: var(--ouro-l);
-  border: none; cursor: pointer;
-  font-family: 'Didact Gothic', sans-serif;
-  font-size: 10px; letter-spacing: 2px;
-  text-transform: uppercase; transition: background .2s;
-  white-space: nowrap;
-}
-.frete-btn:hover { background: var(--ouro); color: var(--verde); }
-.frete-resultado { margin-top: 8px; }
-.frete-opcao {
-  display: flex; align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px; margin-bottom: 4px;
-  border: 1px solid rgba(196,148,58,0.15);
-  cursor: pointer; transition: all .2s;
-  background: var(--creme);
-}
-.frete-opcao:hover { border-color: rgba(196,148,58,0.4); }
-.frete-opcao.selecionado {
-  border-color: var(--ouro);
-  background: rgba(196,148,58,0.08);
-}
-.frete-opcao-info { display: flex; flex-direction: column; gap: 2px; }
-.frete-nome { font-size: 12px; color: var(--verde); }
-.frete-carrier { font-size: 10px; color: var(--muted); }
-.frete-opcao-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.frete-prazo { font-size: 10px; color: var(--muted); letter-spacing: .5px; }
-.frete-preco { font-size: 14px; color: var(--verde); font-weight: 500; }
-.frete-opcao.selecionado .frete-preco { color: var(--ouro); }
-.frete-loading { 
-  display: flex; align-items: center; gap: 8px;
-  font-size: 12px; color: var(--muted); padding: 12px 0;
-}
-.frete-spinner {
-  width: 14px; height: 14px;
-  border: 2px solid rgba(196,148,58,0.2);
-  border-top-color: var(--ouro);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  display: inline-block;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.frete-erro { font-size: 12px; color: #c0392b; padding: 8px 0; }
-.frete-link-cep {
-  font-size: 10px; color: var(--ouro);
-  text-decoration: none; letter-spacing: 1px;
-  display: block; margin-bottom: 12px;
-}
-.frete-link-cep:hover { text-decoration: underline; }
+
+.frete-calc{margin-top:24px}
+.frete-calc-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:block}
+.frete-link-cep{font-size:10px;color:var(--ouro);text-decoration:none;letter-spacing:1px;display:block;margin-bottom:10px}
+.frete-input-row{display:flex;gap:8px;margin-bottom:8px}
+.frete-cep-input{flex:1;padding:12px 16px;border:1px solid rgba(196,148,58,0.25);background:transparent;color:var(--verde);font-family:'Didact Gothic',sans-serif;font-size:13px;outline:none}
+.frete-cep-input:focus{border-color:var(--ouro)}
+.frete-btn{padding:12px 20px;background:var(--verde);color:var(--ouro-l);border:none;cursor:pointer;font-family:'Didact Gothic',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.frete-btn:hover{background:var(--ouro);color:var(--verde)}
+.frete-opcao{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;margin-bottom:4px;border:1px solid rgba(196,148,58,0.15);background:var(--creme)}
+.frete-opcao-info{display:flex;flex-direction:column;gap:2px}
+.frete-nome{font-size:12px;color:var(--verde)}
+.frete-carrier{font-size:10px;color:var(--muted)}
+.frete-opcao-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.frete-prazo{font-size:10px;color:var(--muted)}
+.frete-preco{font-size:14px;color:var(--verde)}
+.frete-loading{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:12px 0}
+.frete-spinner{width:14px;height:14px;border:2px solid rgba(196,148,58,0.2);border-top-color:var(--ouro);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.frete-erro{font-size:12px;color:#c0392b;padding:8px 0}
 
 </style>
 </head>
@@ -595,7 +545,67 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
     </div>
 
     <button class="btn-comprar" onclick="addToCart()">Adicionar ao carrinho</button>
-    <a href="https://wa.me/5537984026744?text=Olá! Gostaria de pedir: Catuaí Vermelho 250g" class="btn-wpp" target="_blank">💬 Pedir pelo WhatsApp</a>
+<div class="frete-calc">
+  <span class="frete-calc-label">Calcular frete</span>
+  <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" class="frete-link-cep" target="_blank">Não sei meu CEP →</a>
+  <div class="frete-input-row">
+    <input type="text" class="frete-cep-input" id="cepprodutoparaiso" placeholder="00000-000" maxlength="9"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/([0-9]{5})([0-9])/,'$1-$2')"
+      onkeydown="if(event.key==='Enter')calcFreteprodutoparaiso()">
+    <button class="frete-btn" onclick="calcFreteprodutoparaiso()">Calcular</button>
+  </div>
+  <div id="resprodutoparaiso"></div>
+</div>
+<script>
+function calcFreteprodutoparaiso(){
+  const s=document.querySelector('.size-btn.active');
+  const tipo=s?s.dataset.size||'250g':'250g';
+  const qty=parseInt((document.getElementById('qty')||{value:'1'}).value);
+  const val=tipo==='1kg'?169:45;
+  handleCalcularFrete('cepprodutoparaiso','resprodutoparaiso',tipo,qty,val*qty);
+}
+</script>
+    <div class="frete-calc">
+  <span class="frete-calc-label">Calcular frete</span>
+  <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" class="frete-link-cep" target="_blank">Não sei meu CEP →</a>
+  <div class="frete-input-row">
+    <input type="text" class="frete-cep-input" id="cep_produtoparaiso" placeholder="00000-000" maxlength="9"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\d{5})(\d)/,'$1-$2')"
+      onkeydown="if(event.key==='Enter')calcFrete_produtoparaiso()">
+    <button class="frete-btn" onclick="calcFrete_produtoparaiso()">Calcular</button>
+  </div>
+  <div class="frete-resultado" id="res_produtoparaiso"></div>
+</div>
+<script>
+function calcFrete_produtoparaiso() {
+  const sel = document.querySelector('.size-btn.active, .opcao-tamanho.ativo');
+  const tipo = sel ? (sel.dataset.size === '1kg' ? '1kg' : '250g') : '250g';
+  const val = tipo === '1kg' ? 169.0 : 45.0;
+  const qty = parseInt(document.getElementById('qty')?.value || '1');
+  handleCalcularFrete('cep_produtoparaiso', 'res_produtoparaiso', tipo, qty, val * qty);
+}
+</script>
+<a href="https://wa.me/5537984026744?text=Olá! Gostaria de pedir: Catuaí Vermelho 250g" <div class="frete-calc">
+  <span class="frete-calc-label">Calcular frete</span>
+  <a href="https://buscacepinter.correios.com.br/app/endereco/index.php" class="frete-link-cep" target="_blank">Não sei meu CEP →</a>
+  <div class="frete-input-row">
+    <input type="text" class="frete-cep-input" id="cep_produtoparaiso" placeholder="00000-000" maxlength="9"
+      oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(\d{5})(\d)/,'$1-$2')"
+      onkeydown="if(event.key==='Enter')calcFrete_produtoparaiso()">
+    <button class="frete-btn" onclick="calcFrete_produtoparaiso()">Calcular</button>
+  </div>
+  <div class="frete-resultado" id="res_produtoparaiso"></div>
+</div>
+<script>
+function calcFrete_produtoparaiso() {
+  const sel = document.querySelector('.size-btn.active, .opcao-tamanho.ativo');
+  const tipo = sel ? (sel.dataset.size === '1kg' ? '1kg' : '250g') : '250g';
+  const val = tipo === '1kg' ? 169.0 : 45.0;
+  const qty = parseInt(document.getElementById('qty')?.value || '1');
+  handleCalcularFrete('cep_produtoparaiso', 'res_produtoparaiso', tipo, qty, val * qty);
+}
+</script>
+    <div btn-wpp" target="_blank">💬 Pedir pelo WhatsApp</a>
 
     <div class="garantias">
       <div class="gar">
@@ -742,3 +752,186 @@ function addToCart() {
     tamanho, moagem,
     preco: parseFloat(preco),
     img: 'foto-paraiso-creme.jpg
+    img: 'foto-produto.jpg'
+  });
+  sessionStorage.setItem('cart', JSON.stringify(cart));
+  window.location.href = 'carrinho.html';
+}
+</script>
+<script>
+// Reveal
+const obs = new IntersectionObserver(e => e.forEach(el => { if(el.isIntersecting) el.target.classList.add('vis') }), {threshold:.08});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Variantes
+function selectVar(el) {
+  document.querySelectorAll('.var-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const price = parseFloat(el.dataset.price).toFixed(2).replace('.', ',');
+  document.getElementById('precoAtual').textContent = 'R$ ' + price;
+}
+
+// Moagem
+function selectMoagem(el) {
+  document.querySelectorAll('.moagem-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Abas
+function openTab(btn, id) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// Carrinho simples (localStorage)
+function addToCart() {
+  const varBtn = document.querySelector('.var-btn.active');
+  const moagemBtn = document.querySelector('.moagem-btn.active');
+  const tamanho = varBtn ? varBtn.textContent.trim().split('\n')[0] : '250g';
+  const preco = varBtn ? varBtn.dataset.price : '35.00';
+  const moagem = moagemBtn ? moagemBtn.textContent.trim() : 'Grãos';
+
+  const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+  cart.push({
+    nome: 'Paraíso Natural',
+    tamanho, moagem,
+    preco: parseFloat(preco),
+    img: 'foto-catigua-creme.jpg'
+  });
+  sessionStorage.setItem('cart', JSON.stringify(cart));
+
+  const btn = document.querySelector('.btn-comprar');
+  btn.textContent = '✓ Adicionado ao carrinho!';
+  btn.style.background = 'var(--verde-l)';
+  setTimeout(() => {
+    btn.textContent = 'Adicionar ao carrinho';
+    btn.style.background = '';
+  }, 2000);
+
+  document.getElementById('cartCount').textContent = `(${cart.length})`;
+}
+
+/* ===== INTEGRAÇÃO FRENET ===== */
+const FRENET_TOKEN = 'AFA2219BRBC85R4765R81F4RB2BAB2455F00';
+const CEP_ORIGEM = '38970000';
+
+const PRODUTO_CONFIG = {
+  '250g': { peso: 0.36, altura: 12, largura: 17, comprimento: 22 },
+  '1kg':  { peso: 1.12, altura: 12, largura: 17, comprimento: 22 },
+  'kit':  { peso: 1.14, altura: 12, largura: 17, comprimento: 22 },
+};
+
+async function calcularFreteFrenet(cepDestino, tipoProduto, quantidade, valorTotal) {
+  const config = PRODUTO_CONFIG[tipoProduto] || PRODUTO_CONFIG['250g'];
+  
+  const body = {
+    SellerCEP: CEP_ORIGEM,
+    RecipientCEP: cepDestino.replace(/\D/g, ''),
+    ShipmentInvoiceValue: valorTotal,
+    ShippingItemArray: [{
+      Height: config.altura,
+      Length: config.comprimento,
+      Quantity: quantidade,
+      Weight: config.peso,
+      Width: config.largura,
+      SKU: tipoProduto,
+      Category: 'Alimentos'
+    }]
+  };
+
+  try {
+    const response = await fetch('/api/frete', {
+      method: 'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) throw new Error('Erro na API Frenet');
+    const data = await response.json();
+    return data.ShippingSevicesArray || [];
+  } catch (err) {
+    console.error('Frenet error:', err);
+    return null;
+  }
+}
+
+function renderizarOpcoesFrete(opcoes, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (!opcoes || opcoes.length === 0) {
+    container.innerHTML = '<p class="frete-erro">CEP não encontrado ou sem cobertura.</p>';
+    return;
+  }
+
+  const disponíveis = opcoes.filter(o => !o.Error);
+  
+  if (disponíveis.length === 0) {
+    container.innerHTML = '<p class="frete-erro">Nenhuma opção disponível para este CEP.</p>';
+    return;
+  }
+
+  const html = disponíveis.map(opcao => {
+    const preco = parseFloat(opcao.ShippingPrice).toLocaleString('pt-BR', {
+      style: 'currency', currency: 'BRL'
+    });
+    const prazo = opcao.DeliveryTime;
+    const nome = opcao.ServiceDescription;
+    const carrier = opcao.Carrier || '';
+    
+    return `
+      <div class="frete-opcao" data-servico="${opcao.ServiceCode}" data-preco="${opcao.ShippingPrice}" data-prazo="${prazo}">
+        <div class="frete-opcao-info">
+          <span class="frete-nome">${nome}</span>
+          ${carrier ? `<span class="frete-carrier">${carrier}</span>` : ''}
+        </div>
+        <div class="frete-opcao-right">
+          <span class="frete-prazo">${prazo} ${prazo === 1 ? 'dia útil' : 'dias úteis'}</span>
+          <span class="frete-preco">${preco}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = html;
+
+  // Seleção de opção
+  container.querySelectorAll('.frete-opcao').forEach(el => {
+    el.addEventListener('click', () => {
+      container.querySelectorAll('.frete-opcao').forEach(e => e.classList.remove('selecionado'));
+      el.classList.add('selecionado');
+      // Disparar evento para o carrinho capturar
+      document.dispatchEvent(new CustomEvent('freteSelected', {
+        detail: {
+          servico: el.dataset.servico,
+          preco: parseFloat(el.dataset.preco),
+          prazo: el.dataset.prazo,
+          nome: el.querySelector('.frete-nome').textContent
+        }
+      }));
+    });
+  });
+}
+
+async function handleCalcularFrete(inputId, resultId, tipoProduto, quantidade, valor) {
+  const input = document.getElementById(inputId);
+  const cep = input ? input.value.replace(/\D/g, '') : '';
+
+  if (cep.length !== 8) {
+    alert('Digite um CEP válido com 8 dígitos.');
+    return;
+  }
+
+  const container = document.getElementById(resultId);
+  if (container) {
+    container.innerHTML = '<div class="frete-loading"><span class="frete-spinner"></span> Calculando...</div>';
+  }
+
+  const opcoes = await calcularFreteFrenet(cep, tipoProduto, quantidade, valor);
+  renderizarOpcoesFrete(opcoes, resultId);
+}
+
+</script>
+</body>
+</html>

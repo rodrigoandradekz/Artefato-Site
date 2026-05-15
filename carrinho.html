@@ -370,7 +370,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 </head>
 <body>
 
-<div class="ann">Frete grátis acima de R$ 300 · Parcele em até 6× sem juros · Cupom: <strong>PRIMEIRACOMPRA</strong></div>
+<div class="ann">Frete grátis: Sul/Sudeste acima de R$ 300 · Demais regiões acima de R$ 500· Parcele em até 6× sem juros · Cupom: <strong>PRIMEIRACOMPRA</strong></div>
 <nav id="nav" class="nav-solid">
   <div class="nav-left">
     <a href="index.html" class="nav-link">Início</a>
@@ -653,7 +653,16 @@ function calcularFreteCarrinho() {
     opcoes.innerHTML = disponiveis.map(o => {
       const preco = parseFloat(o.ShippingPrice);
       const sub = getSubtotal();
-      const gratis = sub >= 300;
+      // Sul/Sudeste: grátis acima de R$300. Demais: acima de R$500
+      const uf = o.Carrier ? '' : ''; // UF vem do CEP
+      const sulSudeste = ['SP','RJ','MG','ES','PR','SC','RS'];
+      // Usar CEP para determinar região via faixa numérica
+      const cepNum = parseInt(cep);
+      const isSulSudeste = (cepNum >= 1000000 && cepNum <= 28999999) || // SP, RJ, ES, MG
+                           (cepNum >= 29000000 && cepNum <= 39999999) || // MG, ES
+                           (cepNum >= 80000000 && cepNum <= 99999999);   // PR, SC, RS
+      const limiteGratis = isSulSudeste ? 300 : 500;
+      const gratis = sub >= limiteGratis;
       const precoFmt = gratis ? '<span style="color:var(--verde-l)">Grátis</span>' :
         preco.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
       return `<div class="frete-opcao-item" onclick="selecionarFrete(this, ${gratis?0:preco}, '${o.ServiceDescription}')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-bottom:4px;border:1px solid rgba(196,148,58,0.15);cursor:pointer;background:var(--creme)">
@@ -769,7 +778,16 @@ async function calcularFreteCarrinho() {
     const sub = getSubtotal();
     opcoes.innerHTML = disponiveis.map(o => {
       const preco = parseFloat(o.ShippingPrice);
-      const gratis = sub >= 300;
+      // Sul/Sudeste: grátis acima de R$300. Demais: acima de R$500
+      const uf = o.Carrier ? '' : ''; // UF vem do CEP
+      const sulSudeste = ['SP','RJ','MG','ES','PR','SC','RS'];
+      // Usar CEP para determinar região via faixa numérica
+      const cepNum = parseInt(cep);
+      const isSulSudeste = (cepNum >= 1000000 && cepNum <= 28999999) || // SP, RJ, ES, MG
+                           (cepNum >= 29000000 && cepNum <= 39999999) || // MG, ES
+                           (cepNum >= 80000000 && cepNum <= 99999999);   // PR, SC, RS
+      const limiteGratis = isSulSudeste ? 300 : 500;
+      const gratis = sub >= limiteGratis;
       const precoFmt = gratis ? '<span style="color:var(--verde-l)">Grátis</span>' :
         preco.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
       return `<div onclick="selecionarFrete(this,${gratis?0:preco},'${o.ServiceDescription}')"

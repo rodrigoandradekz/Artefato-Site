@@ -485,7 +485,7 @@ function addToCart() {
   const moagem = document.querySelector('.moagem-btn.active')?.textContent.trim() || 'Grãos';
   const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
   cart.push({ nome: 'Coleção Artefato', tamanho: 'Kit 4×250g', moagem, preco: 175.00,
-    img: 'foto-catigua-creme.jpg' });
+    img: 'https://www.artefatocafes.com.br/cdn/shop/files/IMG-8816.jpg?v=1763471434&width=200' });
   sessionStorage.setItem('cart', JSON.stringify(cart));
   const btn = document.querySelector('.btn-comprar');
   btn.textContent = '✓ Adicionado ao carrinho!';

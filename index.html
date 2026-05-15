@@ -1082,8 +1082,20 @@ footer {
   .hero {
     grid-template-columns: 1fr;
     height: auto;
-    min-height: 100svh;
-    grid-template-rows: 45vh 1fr;
+    min-height: auto;
+    grid-template-rows: auto auto;
+  }
+
+  .hero-img {
+    height: 50vh;
+    min-height: 360px;
+  }
+
+  .hero-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .hero-img { order: 1; }
   .hero-img::after { background: linear-gradient(to bottom, transparent 50%, var(--verde) 100%); }

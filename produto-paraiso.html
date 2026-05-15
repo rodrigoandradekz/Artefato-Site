@@ -544,19 +544,6 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
       <button class="moagem-btn" onclick="selectMoagem(this)">Média</button>
       <button class="moagem-btn" onclick="selectMoagem(this)">Fina</button>
     </div>
-
-    
-    <!-- CALCULADOR DE FRETE -->
-    <div class="frete-calc-body">
-        <div class="frete-cep-row">
-          <input class="frete-cep-input" id="freteCepInput" type="text"
-            placeholder="Digite seu CEP" maxlength="9">
-          <button class="frete-cep-btn" id="freteCepBtn" onclick="calcFrete()">Calcular</button>
-        </div>
-        <div class="frete-erro" id="freteErro">CEP inválido. Verifique e tente novamente.</div>
-        <div class="frete-resultado" id="freteResultado"></div>
-        <div class="frete-hint">Frete grátis para pedidos acima de R$ 300,00</div>
-      </div>
     </div>
 
     <div class="preco-area">
@@ -581,7 +568,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 <script>
 ).value);
   const val=tipo==='1kg'?169:45;
-  handleCalcularFrete('cepprodutoparaiso','resprodutoparaiso',tipo,qty,val*qty);
+  handleCalcularFrete('freteCep','resprodutoparaiso',tipo,qty,val*qty);
 }
 </script>
     <div class="frete-resultado" id="res_produtoparaiso"></div>

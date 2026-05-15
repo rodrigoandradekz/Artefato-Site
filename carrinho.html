@@ -589,67 +589,92 @@ document.getElementById('cepInput').addEventListener('keydown', e => {
 });
 
 function calcularFreteCarrinho() {
-  const cep = document.getElementById('cepInput').value.replace(/\D/g,'');
+  const cepInput = document.getElementById('cepInput');
   const btn = document.getElementById('freteBtnCart');
   const erro = document.getElementById('freteErroCart');
   const opcoes = document.getElementById('freteOpcoes');
 
-  if(cep.length < 8) { erro.style.display='block'; return; }
+  const cep = cepInput.value.replace(/[^0-9]/g, '');
+  if (cep.length !== 8) { erro.style.display='block'; return; }
+
   erro.style.display = 'none';
   btn.textContent = 'Buscando...';
   btn.style.opacity = '.6';
   btn.style.pointerEvents = 'none';
-  opcoes.innerHTML = '';
-  opcoes.classList.remove('show');
+  opcoes.innerHTML = '<div class="frete-loading"><span class="frete-spinner"></span> Calculando...</div>';
+  opcoes.classList.add('show');
 
-  fetch(`https://viacep.com.br/ws/${cep}/json/`)
-    .then(r => r.json())
-    .then(data => {
-      if(data.erro) throw new Error('CEP inválido');
-      const uf = data.uf;
-      const sub = getSubtotal();
-      const isGratis = sub >= 300;
+  // Montar itens do carrinho
+  const cart = JSON.parse(sessionStorage.getItem('artefato_cart') || '[]');
+  const configs = {
+    '250g': {peso:0.36, altura:12, largura:17, comprimento:22},
+    '1kg':  {peso:1.12, altura:12, largura:17, comprimento:22},
+    'kit':  {peso:1.14, altura:12, largura:17, comprimento:22}
+  };
 
-      const sudeste = ['SP','RJ','MG','ES'];
-      const sul = ['PR','SC','RS'];
-      const co = ['GO','MT','MS','DF'];
-      const ne = ['BA','SE','AL','PE','PB','RN','CE','PI','MA'];
+  let items = [];
+  let valorTotal = 0;
 
-      let pac, sedex, jadlog;
-      if(sudeste.includes(uf))      { pac=14.90; sedex=22.90; jadlog=16.90; }
-      else if(sul.includes(uf))     { pac=16.90; sedex=26.90; jadlog=18.90; }
-      else if(co.includes(uf))      { pac=18.90; sedex=29.90; jadlog=20.90; }
-      else if(ne.includes(uf))      { pac=21.90; sedex=34.90; jadlog=23.90; }
-      else                           { pac=26.90; sedex=42.90; jadlog=28.90; }
-
-      const fretes = [
-        { nome:'PAC — Correios', prazo:'7 a 12 dias úteis', preco: isGratis?0:pac },
-        { nome:'SEDEX — Correios', prazo:'2 a 4 dias úteis', preco: isGratis?0:sedex },
-        { nome:'Jadlog .Package', prazo:'3 a 7 dias úteis', preco: isGratis?0:jadlog },
-      ];
-
-      opcoes.innerHTML = fretes.map((f,i) => `
-        <div class="frete-opcao${i===0?' selected':''}"
-          onclick="selecionarFrete(this, ${f.preco}, '${f.nome}')">
-          <div>
-            <div class="frete-opcao-info">${f.nome}</div>
-            <div class="frete-opcao-prazo">${f.prazo}</div>
-          </div>
-          <div class="frete-opcao-preco" style="${f.preco===0?'color:var(--verde-l)':''}">
-            ${f.preco===0 ? 'Grátis 🎉' : 'R$ '+f.preco.toFixed(2).replace('.',',')}
-          </div>
-        </div>
-      `).join('');
-      opcoes.classList.add('show');
-      selecionarFrete(opcoes.querySelector('.frete-opcao.selected'), fretes[0].preco, fretes[0].nome);
-    })
-    .catch(() => { erro.style.display='block'; })
-    .finally(() => {
-      btn.textContent = 'Calcular';
-      btn.style.opacity = '';
-      btn.style.pointerEvents = '';
+  if (cart.length > 0) {
+    items = cart.map(item => {
+      const tipo = item.tamanho === '1kg' ? '1kg' :
+                   (item.nome||'').toLowerCase().includes('coleção') ? 'kit' : '250g';
+      const cfg = configs[tipo];
+      valorTotal += parseFloat(item.preco||0) * (item.qty||1);
+      return {
+        Height: cfg.altura, Length: cfg.comprimento,
+        Quantity: item.qty||1, Weight: cfg.peso,
+        Width: cfg.largura, SKU: tipo, Category: 'Alimentos'
+      };
     });
+  } else {
+    // Carrinho vazio — usar 1 pacote 250g como fallback
+    items = [{Height:12, Length:22, Quantity:1, Weight:0.36, Width:17, SKU:'250g', Category:'Alimentos'}];
+    valorTotal = 45;
+  }
+
+  fetch('/api/frete', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      SellerCEP: '38970000',
+      RecipientCEP: cep,
+      ShipmentInvoiceValue: valorTotal,
+      ShippingItemArray: items
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    const disponiveis = (data.ShippingSevicesArray||[]).filter(o => !o.Error);
+    if (!disponiveis.length) {
+      opcoes.innerHTML = '<p class="frete-erro">Sem cobertura para este CEP.</p>';
+      return;
+    }
+    opcoes.innerHTML = disponiveis.map(o => {
+      const preco = parseFloat(o.ShippingPrice);
+      const sub = getSubtotal();
+      const gratis = sub >= 300;
+      const precoFmt = gratis ? '<span style="color:var(--verde-l)">Grátis</span>' :
+        preco.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+      return `<div class="frete-opcao-item" onclick="selecionarFrete(this, ${gratis?0:preco}, '${o.ServiceDescription}')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-bottom:4px;border:1px solid rgba(196,148,58,0.15);cursor:pointer;background:var(--creme)">
+        <div>
+          <div style="font-size:12px;color:var(--verde)">${o.ServiceDescription}</div>
+          <div style="font-size:10px;color:var(--muted)">${o.Carrier||''} · ${o.DeliveryTime} ${o.DeliveryTime==1?'dia útil':'dias úteis'}</div>
+        </div>
+        <div style="font-size:14px;color:var(--verde)">${precoFmt}</div>
+      </div>`;
+    }).join('');
+  })
+  .catch(() => {
+    opcoes.innerHTML = '<p class="frete-erro">Erro ao calcular. Tente novamente.</p>';
+  })
+  .finally(() => {
+    btn.textContent = 'Calcular';
+    btn.style.opacity = '';
+    btn.style.pointerEvents = '';
+  });
 }
+
 
 function selecionarFrete(el, valor, nome) {
   document.querySelectorAll('.frete-opcao').forEach(o => o.classList.remove('selected'));
@@ -686,71 +711,4 @@ function aplicarCupom() {
 renderCart();
 
 /* FRENET NO CARRINHO */
-async function calcularFreteCarrinho() {
-  const cepInput = document.getElementById('cepInput') || document.getElementById('freteCep');
-  const cep = cepInput ? cepInput.value.replace(/\D/g, '') : '';
-  
-  if (cep.length !== 8) {
-    alert('Digite um CEP válido.');
-    return;
-  }
-
-  const container = document.getElementById('freteOpcoes') || document.getElementById('freteResult');
-  if (container) {
-    container.innerHTML = '<div class="frete-loading"><span class="frete-spinner"></span> Calculando...</div>';
-  }
-
-  // Pegar itens do carrinho
-  const cart = JSON.parse(sessionStorage.getItem('artefato_cart') || '[]');
-  if (cart.length === 0) {
-    if (container) container.innerHTML = '<p class="frete-erro">Carrinho vazio.</p>';
-    return;
-  }
-
-  // Montar array de itens
-  const items = cart.map(item => {
-    const tipo = item.tamanho === '1kg' ? '1kg' : item.nome?.toLowerCase().includes('coleção') ? 'kit' : '250g';
-    const config = {
-      '250g': { peso: 0.36, altura: 12, largura: 17, comprimento: 22 },
-      '1kg':  { peso: 1.12, altura: 12, largura: 17, comprimento: 22 },
-      'kit':  { peso: 1.14, altura: 12, largura: 17, comprimento: 22 },
-    }[tipo] || { peso: 0.36, altura: 12, largura: 17, comprimento: 22 };
-
-    return {
-      Height: config.altura,
-      Length: config.comprimento,
-      Quantity: item.qty || 1,
-      Weight: config.peso,
-      Width: config.largura,
-      SKU: tipo,
-      Category: 'Alimentos'
-    };
-  });
-
-  const valorTotal = cart.reduce((sum, item) => sum + (parseFloat(item.preco) * (item.qty || 1)), 0);
-
-  const body = {
-    SellerCEP: '38970000',
-    RecipientCEP: cep,
-    ShipmentInvoiceValue: valorTotal,
-    ShippingItemArray: items
-  };
-
-  try {
-    const response = await fetch('/api/frete', {
-      method: 'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-
-    const data = await response.json();
-    const opcoes = data.ShippingSevicesArray || [];
-    renderizarOpcoesFrete(opcoes, container.id);
-  } catch (err) {
-    if (container) container.innerHTML = '<p class="frete-erro">Erro ao calcular frete. Tente novamente.</p>';
-  }
-}
-
-</script>
-</body>
-</html>
+async 

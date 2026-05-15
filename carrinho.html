@@ -294,6 +294,78 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
   .cart-item { position: relative; }
   .carrinho-resumo { position: static; padding: 28px 20px; }
 }
+
+/* ===== FRETE FRENET ===== */
+.frete-calc { margin-top: 24px; }
+.frete-calc-label {
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 10px; display: block;
+}
+.frete-input-row {
+  display: flex; gap: 8px; margin-bottom: 12px;
+}
+.frete-cep-input {
+  flex: 1; padding: 12px 16px;
+  border: 1px solid rgba(196,148,58,0.25);
+  background: transparent; color: var(--verde);
+  font-family: 'Didact Gothic', sans-serif;
+  font-size: 13px; outline: none;
+  transition: border-color .2s;
+}
+.frete-cep-input:focus { border-color: var(--ouro); }
+.frete-btn {
+  padding: 12px 20px;
+  background: var(--verde); color: var(--ouro-l);
+  border: none; cursor: pointer;
+  font-family: 'Didact Gothic', sans-serif;
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; transition: background .2s;
+  white-space: nowrap;
+}
+.frete-btn:hover { background: var(--ouro); color: var(--verde); }
+.frete-resultado { margin-top: 8px; }
+.frete-opcao {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px; margin-bottom: 4px;
+  border: 1px solid rgba(196,148,58,0.15);
+  cursor: pointer; transition: all .2s;
+  background: var(--creme);
+}
+.frete-opcao:hover { border-color: rgba(196,148,58,0.4); }
+.frete-opcao.selecionado {
+  border-color: var(--ouro);
+  background: rgba(196,148,58,0.08);
+}
+.frete-opcao-info { display: flex; flex-direction: column; gap: 2px; }
+.frete-nome { font-size: 12px; color: var(--verde); }
+.frete-carrier { font-size: 10px; color: var(--muted); }
+.frete-opcao-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.frete-prazo { font-size: 10px; color: var(--muted); letter-spacing: .5px; }
+.frete-preco { font-size: 14px; color: var(--verde); font-weight: 500; }
+.frete-opcao.selecionado .frete-preco { color: var(--ouro); }
+.frete-loading { 
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted); padding: 12px 0;
+}
+.frete-spinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(196,148,58,0.2);
+  border-top-color: var(--ouro);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.frete-erro { font-size: 12px; color: #c0392b; padding: 8px 0; }
+.frete-link-cep {
+  font-size: 10px; color: var(--ouro);
+  text-decoration: none; letter-spacing: 1px;
+  display: block; margin-bottom: 12px;
+}
+.frete-link-cep:hover { text-decoration: underline; }
+
 </style>
 </head>
 <body>
@@ -358,7 +430,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
       <div class="frete-label">Calcular frete</div>
       <div class="frete-input-row">
         <input class="frete-input" id="cepInput" type="text" placeholder="Digite seu CEP" maxlength="9">
-        <button class="frete-btn" id="freteBtnCart" onclick="calcularFrete()">Calcular</button>
+        <button class="frete-btn" id="freteBtnCart" onclick="calcularFreteCarrinho()">Calcular</button>
       </div>
       <div class="frete-erro-cart" id="freteErroCart" style="font-size:11px;color:#c0392b;margin-top:6px;display:none">CEP inválido.</div>
       <div class="frete-opcoes" id="freteOpcoes"></div>
@@ -513,10 +585,10 @@ document.getElementById('cepInput').addEventListener('input', function() {
   this.value = v;
 });
 document.getElementById('cepInput').addEventListener('keydown', e => {
-  if(e.key === 'Enter') calcularFrete();
+  if(e.key === 'Enter') calcularFreteCarrinho();
 });
 
-function calcularFrete() {
+function calcularFreteCarrinho() {
   const cep = document.getElementById('cepInput').value.replace(/\D/g,'');
   const btn = document.getElementById('freteBtnCart');
   const erro = document.getElementById('freteErroCart');
@@ -612,6 +684,76 @@ function aplicarCupom() {
 }
 
 renderCart();
+
+/* FRENET NO CARRINHO */
+async function calcularFreteCarrinho() {
+  const cepInput = document.getElementById('cepInput') || document.getElementById('freteCep');
+  const cep = cepInput ? cepInput.value.replace(/\D/g, '') : '';
+  
+  if (cep.length !== 8) {
+    alert('Digite um CEP válido.');
+    return;
+  }
+
+  const container = document.getElementById('freteOpcoes') || document.getElementById('freteResult');
+  if (container) {
+    container.innerHTML = '<div class="frete-loading"><span class="frete-spinner"></span> Calculando...</div>';
+  }
+
+  // Pegar itens do carrinho
+  const cart = JSON.parse(sessionStorage.getItem('artefato_cart') || '[]');
+  if (cart.length === 0) {
+    if (container) container.innerHTML = '<p class="frete-erro">Carrinho vazio.</p>';
+    return;
+  }
+
+  // Montar array de itens
+  const items = cart.map(item => {
+    const tipo = item.tamanho === '1kg' ? '1kg' : item.nome?.toLowerCase().includes('coleção') ? 'kit' : '250g';
+    const config = {
+      '250g': { peso: 0.36, altura: 12, largura: 17, comprimento: 22 },
+      '1kg':  { peso: 1.12, altura: 12, largura: 17, comprimento: 22 },
+      'kit':  { peso: 1.14, altura: 12, largura: 17, comprimento: 22 },
+    }[tipo] || { peso: 0.36, altura: 12, largura: 17, comprimento: 22 };
+
+    return {
+      Height: config.altura,
+      Length: config.comprimento,
+      Quantity: item.qty || 1,
+      Weight: config.peso,
+      Width: config.largura,
+      SKU: tipo,
+      Category: 'Alimentos'
+    };
+  });
+
+  const valorTotal = cart.reduce((sum, item) => sum + (parseFloat(item.preco) * (item.qty || 1)), 0);
+
+  const body = {
+    SellerCEP: '38620000',
+    RecipientCEP: cep,
+    ShipmentInvoiceValue: valorTotal,
+    ShippingItemArray: items
+  };
+
+  try {
+    const response = await fetch('https://api.frenet.com.br/shipping/quote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': 'AFA2219BRBC85R4765R81F4RB2BAB2455F00'
+      },
+      body: JSON.stringify(body)
+    });
+
+    const data = await response.json();
+    const opcoes = data.ShippingSevicesArray || [];
+    renderizarOpcoesFrete(opcoes, container.id);
+  } catch (err) {
+    if (container) container.innerHTML = '<p class="frete-erro">Erro ao calcular frete. Tente novamente.</p>';
+  }
+}
+
 </script>
 </body>
 </html>

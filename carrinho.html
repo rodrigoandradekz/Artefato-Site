@@ -710,5 +710,83 @@ function aplicarCupom() {
 
 renderCart();
 
+
 /* FRENET NO CARRINHO */
-async 
+async function calcularFreteCarrinho() {
+  const cepInput = document.getElementById('cepInput');
+  const btn = document.getElementById('freteBtnCart');
+  const erro = document.getElementById('freteErroCart');
+  const opcoes = document.getElementById('freteOpcoes');
+
+  const cep = cepInput.value.replace(/[^0-9]/g, '');
+  if (cep.length !== 8) { if(erro) erro.style.display='block'; return; }
+  if(erro) erro.style.display = 'none';
+  if(btn) { btn.textContent = 'Buscando...'; btn.style.opacity='.6'; btn.style.pointerEvents='none'; }
+  if(opcoes) { opcoes.innerHTML = '<div style="font-size:12px;color:var(--muted);padding:12px 0">Calculando...</div>'; opcoes.classList.add('show'); }
+
+  const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+  const configs = {
+    '250g':{peso:0.36,altura:12,largura:17,comprimento:22},
+    '1kg': {peso:1.12,altura:12,largura:17,comprimento:22},
+    'kit': {peso:1.14,altura:12,largura:17,comprimento:22}
+  };
+
+  let items = [];
+  let valorTotal = 0;
+  if (cart.length > 0) {
+    items = cart.map(item => {
+      const tipo = item.tamanho === '1kg' ? '1kg' :
+                   (item.nome||'').toLowerCase().includes('coleção') ? 'kit' : '250g';
+      const cfg = configs[tipo];
+      valorTotal += parseFloat(item.preco||0) * (item.qty||1);
+      return { Height:cfg.altura, Length:cfg.comprimento,
+               Quantity:item.qty||1, Weight:cfg.peso,
+               Width:cfg.largura, SKU:tipo, Category:'Alimentos' };
+    });
+  } else {
+    items = [{Height:12,Length:22,Quantity:1,Weight:0.36,Width:17,SKU:'250g',Category:'Alimentos'}];
+    valorTotal = 45;
+  }
+
+  try {
+    const r = await fetch('/api/frete', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        SellerCEP: '38970000',
+        RecipientCEP: cep,
+        ShipmentInvoiceValue: valorTotal,
+        ShippingItemArray: items
+      })
+    });
+    const data = await r.json();
+    const disponiveis = (data.ShippingSevicesArray||[]).filter(o => !o.Error);
+    if (!opcoes) return;
+    if (!disponiveis.length) {
+      opcoes.innerHTML = '<p style="font-size:12px;color:#c0392b;padding:8px 0">Sem cobertura para este CEP.</p>';
+      return;
+    }
+    const sub = getSubtotal();
+    opcoes.innerHTML = disponiveis.map(o => {
+      const preco = parseFloat(o.ShippingPrice);
+      const gratis = sub >= 300;
+      const precoFmt = gratis ? '<span style="color:var(--verde-l)">Grátis</span>' :
+        preco.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+      return `<div onclick="selecionarFrete(this,${gratis?0:preco},'${o.ServiceDescription}')"
+        style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-bottom:4px;border:1px solid rgba(196,148,58,0.15);cursor:pointer;background:var(--creme)">
+        <div>
+          <div style="font-size:12px;color:var(--verde)">${o.ServiceDescription}</div>
+          <div style="font-size:10px;color:var(--muted)">${o.Carrier||''} · ${o.DeliveryTime} ${o.DeliveryTime==1?'dia útil':'dias úteis'}</div>
+        </div>
+        <div style="font-size:14px;color:var(--verde)">${precoFmt}</div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    if(opcoes) opcoes.innerHTML = '<p style="font-size:12px;color:#c0392b;padding:8px 0">Erro ao calcular. Tente novamente.</p>';
+  } finally {
+    if(btn) { btn.textContent = 'Calcular'; btn.style.opacity=''; btn.style.pointerEvents=''; }
+  }
+}
+</script>
+</body>
+</html>

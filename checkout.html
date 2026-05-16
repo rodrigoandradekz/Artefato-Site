@@ -493,23 +493,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 
       <!-- PIX -->
       <div class="pix-panel show" id="pixPanel">
-        <div class="pix-info">
-          <p>Após finalizar o pedido, você receberá o QR Code e a chave Pix para pagamento. Seu pedido será confirmado em até 30 minutos após a identificação do pagamento.</p>
-          <div class="pix-desconto">🎉 Pagando no Pix, você garante 5% de desconto adicional!</div>
-        </div>
-      </div>
-
-      <!-- CARTÃO -->
-      <div class="card-panel" id="cartaoPanel">
-        <div class="card-flags">
-          <span class="card-flag">Visa</span>
-          <span class="card-flag">Master</span>
-          <span class="card-flag">Elo</span>
-          <span class="card-flag">Amex</span>
-          <span class="card-flag">Hipercard</span>
-        </div>
-        <div class="form-row full" style="margin-bottom:12px">
-          <!-- PAGAMENTO MERCADO PAGO -->
+        <!-- PAGAMENTO MERCADO PAGO -->
 <div class="section-title">Pagamento</div>
 <div class="payment-tabs">
   <button class="payment-tab active" onclick="selectTab('pix')">⚡ Pix</button>
@@ -564,6 +548,81 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
 <div class="payment-error" id="paymentError"></div>
 <div class="payment-loading" id="paymentLoading"><span class="pay-spinner"></span> Processando...</div>
 <button class="btn-finalizar" onclick="finalizarPedido()">Finalizar pedido</button>
+
+    <div class="checkout-seguro">
+      🔒 Pagamento 100% seguro via Mercado Pago
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Carregar dados do carrinho e frete
+const cart = JSON.parse(sessionStorage.getItem('cart') || '[]');
+const freteData = JSON.parse(sessionStorage.getItem('frete') || '{"valor":0,"nome":"A calcular"}');
+const cupomData = JSON.parse(sessionStorage.getItem('cupom') || '{"desconto":0}');
+let payMethod = 'pix';
+
+// Mascaras
+function mask(el, pattern) {
+  el.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,''), i = 0;
+    this.value = pattern.replace(/#/g, () => v[i++] || '').replace(/[#\s]+$/,'');
+  });
+}
+mask(document.getElementById('cpf'), '###.###.###-##');
+mask(document.getElementById('tel'), '(##) #####-####');
+mask(document.getElementById('cep'), '#####-###');
+mask(document.getElementById('cardNum'), '#### #### #### ####');
+mask(document.getElementById('cardVal'), '##/##');
+
+// CEP auto-fill
+async function buscarCEP() {
+  const cep = document.getElementById('cep').value.replace(/\D/g,'');
+  if(cep.length < 8) { showErr('cepErr', true); return; }
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d = await r.json();
+    if(d.erro) { showErr('cepErr', true); return; }
+    document.getElementById('rua').value = d.logradouro || '';
+    document.getElementById('bairro').value = d.bairro || '';
+    document.getElementById('cidade').value = d.localidade || '';
+    document.getElementById('estado').value = d.uf || '';
+    showErr('cepErr', false);
+    document.getElementById('numero').focus();
+  } catch(e) { showErr('cepErr', true); }
+}
+document.getElementById('cep').addEventListener('keydown', e => { if(e.key==='Enter') buscarCEP(); });
+
+// Frete do carrinho
+const freteNomeEl = document.getElementById('freteNome');
+if(freteData.nome !== 'A calcular') {
+  freteNomeEl.value = freteData.nome;
+}
+
+// Parcelas
+function buildParcelas(total) {
+  const sel = document.getElementById('parcelas');
+  sel.innerHTML = '';
+  for(let i = 1; i <= 6; i++) {
+    const v = (total / i).toFixed(2).replace('.',',');
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i === 1 ? `1× de R$ ${v} (sem juros)` : `${i}× de R$ ${v} (sem juros)`;
+    sel.appendChild(opt);
+  }
+}
+
+// Render resumo
+function fmt(v) { return 'R$ ' + v.toFixed(2).replace('.',','); }
+
+function renderResumo() {
+  const items = document.getElementById('resumoItems');
+  items.innerHTML = cart.map(item => `
+    <div class="resumo-item">
+      <div style="position:relative;flex-shrink:0">
+        <img class="resumo-item-img" src="${item.img}" alt="${item.nome}">
+        <!-- PAGAMENTO MERCADO
 
     <div class="checkout-seguro">
       🔒 Pagamento 100% seguro via Mercado Pago
@@ -746,9 +805,13 @@ renderResumo();
 
 /* MERCADO PAGO */
 const MP_PUBLIC_KEY = 'TEST-d93ef0ce-51b1-4ad0-8924-e2ec6cc9b2a0';
-let mp;
+let mp = null;
 
 function initMP() {
+  if (typeof MercadoPago === 'undefined') {
+    setTimeout(initMP, 200);
+    return;
+  }
   mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
 }
 
@@ -817,6 +880,7 @@ async function finalizarPedido() {
       const expiry = document.getElementById('cardExpiry').value.split('/');
       const cvv = document.getElementById('cardCvv').value;
       if(!num||!holder||expiry.length<2||!cvv) throw new Error('Preencha todos os dados do cartão.');
+      if (!mp) { throw new Error('SDK de pagamento ainda carregando. Tente novamente.'); }
       const token = await mp.createCardToken({
         cardNumber:num, cardholderName:holder,
         cardExpirationMonth:expiry[0], cardExpirationYear:'20'+expiry[1],

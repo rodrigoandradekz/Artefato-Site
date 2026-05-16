@@ -509,72 +509,7 @@ footer{background:var(--verde);border-top:1px solid rgba(196,148,58,0.1);padding
           <span class="card-flag">Hipercard</span>
         </div>
         <div class="form-row full" style="margin-bottom:12px">
-          <div class="field">
-            <label>Número do cartão *</label>
-            <input type="text" id="cardNum" placeholder="0000 0000 0000 0000" maxlength="19">
-          </div>
-        </div>
-        <div class="form-row full" style="margin-bottom:12px">
-          <div class="field">
-            <label>Nome no cartão *</label>
-            <input type="text" id="cardNome" placeholder="Como está no cartão">
-          </div>
-        </div>
-        <div class="form-row" style="margin-bottom:12px">
-          <div class="field">
-            <label>Validade *</label>
-            <input type="text" id="cardVal" placeholder="MM/AA" maxlength="5">
-          </div>
-          <div class="field">
-            <label>CVV *</label>
-            <input type="text" id="cardCvv" placeholder="000" maxlength="4">
-          </div>
-        </div>
-        <div class="form-row full">
-          <div class="field">
-            <label>Parcelas</label>
-            <select class="parcelas-select" id="parcelas"></select>
-          </div>
-        </div>
-      </div>
-
-      <!-- BOLETO -->
-      <div class="boleto-panel" id="boletoPanel">
-        <div class="boleto-info">
-          <p>O boleto será gerado após a confirmação do pedido e terá vencimento em 3 dias úteis. O pedido será separado após a compensação do pagamento (1 a 2 dias úteis).</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- RESUMO -->
-  <div class="checkout-resumo">
-    <div class="resumo-title">Resumo do pedido</div>
-    <div class="resumo-items" id="resumoItems"></div>
-
-    <div class="resumo-linha">
-      <span>Subtotal</span>
-      <span id="rSubtotal">—</span>
-    </div>
-    <div class="resumo-linha desconto" id="rDescontoLinha" style="display:none">
-      <span>Desconto</span>
-      <span id="rDesconto">—</span>
-    </div>
-    <div class="resumo-linha" id="rPixLinha" style="display:none">
-      <span>Desconto Pix (5%)</span>
-      <span id="rPixDesc" style="color:var(--verde-l)">—</span>
-    </div>
-    <div class="resumo-linha">
-      <span>Frete</span>
-      <span id="rFrete">—</span>
-    </div>
-    <div class="resumo-linha total">
-      <span>Total</span>
-      <span id="rTotal">—</span>
-    </div>
-
-    <!-- PAGAMENTO MERCADO PAGO -->
+          <!-- PAGAMENTO MERCADO PAGO -->
 <div class="section-title">Pagamento</div>
 <div class="payment-tabs">
   <button class="payment-tab active" onclick="selectTab('pix')">⚡ Pix</button>
